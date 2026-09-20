@@ -2,6 +2,7 @@ package mate.academy.bookservice.book.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.book.model.Book;
 import mate.academy.bookservice.book.repository.BookRepository;
@@ -22,5 +23,10 @@ public class BookRepositoryImpl implements BookRepository {
     public List<Book> findAll() {
         return entityManager.createQuery("FROM Book", Book.class)
                 .getResultList();
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(Book.class, id));
     }
 }

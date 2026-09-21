@@ -1,4 +1,4 @@
-package mate.academy.bookservice.book.model;
+package mate.academy.bookservice.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

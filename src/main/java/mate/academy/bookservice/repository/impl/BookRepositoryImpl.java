@@ -1,11 +1,11 @@
-package mate.academy.bookservice.book.repository.impl;
+package mate.academy.bookservice.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookservice.book.model.Book;
-import mate.academy.bookservice.book.repository.BookRepository;
+import mate.academy.bookservice.model.Book;
+import mate.academy.bookservice.repository.BookRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

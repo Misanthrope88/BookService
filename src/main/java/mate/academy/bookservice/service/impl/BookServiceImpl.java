@@ -1,14 +1,14 @@
-package mate.academy.bookservice.book.service.impl;
+package mate.academy.bookservice.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookservice.book.dto.BookDto;
-import mate.academy.bookservice.book.dto.CreateBookRequestDto;
-import mate.academy.bookservice.book.mapper.BookMapper;
-import mate.academy.bookservice.book.model.Book;
-import mate.academy.bookservice.book.repository.BookRepository;
-import mate.academy.bookservice.book.service.BookService;
+import mate.academy.bookservice.dto.BookDto;
+import mate.academy.bookservice.dto.CreateBookRequestDto;
 import mate.academy.bookservice.exception.EntityNotFoundException;
+import mate.academy.bookservice.mapper.BookMapper;
+import mate.academy.bookservice.model.Book;
+import mate.academy.bookservice.repository.BookRepository;
+import mate.academy.bookservice.service.BookService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,11 +3,13 @@ package mate.academy.bookservice.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.BookDto;
+import mate.academy.bookservice.dto.BookSearchParametersDto;
 import mate.academy.bookservice.dto.CreateBookRequestDto;
 import mate.academy.bookservice.exception.EntityNotFoundException;
 import mate.academy.bookservice.mapper.BookMapper;
 import mate.academy.bookservice.model.Book;
 import mate.academy.bookservice.repository.BookRepository;
+import mate.academy.bookservice.repository.specification.BookSpecificationBuilder;
 import mate.academy.bookservice.service.BookService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     @Transactional
@@ -39,6 +42,14 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
         return bookMapper.toDto(book);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+        return bookRepository.findAll(bookSpecificationBuilder.build(searchParameters)).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     @Override

@@ -41,7 +41,7 @@ databaseChangeLog:
                   name: cover_image
                   type: VARCHAR(255)
               - column:
-                  name: deleted
+                  name: is_deleted
                   type: BOOLEAN
                   defaultValueBoolean: false
                   constraints:

@@ -9,20 +9,24 @@ import org.springframework.util.StringUtils;
 
 @Component
 public class BookSpecificationBuilder {
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "author";
+    private static final String ISBN = "isbn";
+
     public Specification<Book> build(BookSearchParametersDto searchParameters) {
         Specification<Book> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.conjunction();
         if (StringUtils.hasText(searchParameters.title())) {
             specification = specification.and(containsIgnoreCase(
-                    "title", searchParameters.title()));
+                    TITLE, searchParameters.title()));
         }
         if (StringUtils.hasText(searchParameters.author())) {
             specification = specification.and(containsIgnoreCase(
-                    "author", searchParameters.author()));
+                    AUTHOR, searchParameters.author()));
         }
         if (StringUtils.hasText(searchParameters.isbn())) {
             specification = specification.and(equalsIgnoreCase(
-                    "isbn", searchParameters.isbn()));
+                    ISBN, searchParameters.isbn()));
         }
         return specification;
     }

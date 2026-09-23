@@ -1,12 +1,14 @@
 package mate.academy.bookservice.controller;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.BookDto;
 import mate.academy.bookservice.dto.BookSearchParametersDto;
 import mate.academy.bookservice.dto.CreateBookRequestDto;
 import mate.academy.bookservice.service.BookService;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +27,15 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookDto> getAll() {
-        return bookService.getAll();
+    public Page<BookDto> getAll(@ParameterObject Pageable pageable) {
+        return bookService.getAll(pageable);
     }
 
     @GetMapping("/search")
-    public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    public Page<BookDto> searchBooks(@ParameterObject @Valid
+                                     BookSearchParametersDto searchParameters,
+                                     @ParameterObject Pageable pageable) {
+        return bookService.search(searchParameters, pageable);
     }
 
     @GetMapping("/{id}")

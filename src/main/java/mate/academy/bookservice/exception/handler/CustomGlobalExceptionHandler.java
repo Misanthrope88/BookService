@@ -3,6 +3,7 @@ package mate.academy.bookservice.exception.handler;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import mate.academy.bookservice.exception.EntityNotFoundException;
+import mate.academy.bookservice.exception.RegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,5 +30,10 @@ public class CustomGlobalExceptionHandler {
             EntityNotFoundException exception) {
         return Map.of("error", exception.getMessage());
     }
-}
 
+    @ExceptionHandler(RegistrationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handleRegistrationException(RegistrationException exception) {
+        return Map.of("error", exception.getMessage());
+    }
+}

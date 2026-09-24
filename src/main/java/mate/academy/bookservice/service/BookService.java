@@ -1,18 +1,19 @@
 package mate.academy.bookservice.service;
 
-import java.util.List;
 import mate.academy.bookservice.dto.BookDto;
 import mate.academy.bookservice.dto.BookSearchParametersDto;
 import mate.academy.bookservice.dto.CreateBookRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto create(CreateBookRequestDto bookDto);
 
-    List<BookDto> getAll();
+    Page<BookDto> getAll(Pageable pageable);
 
     BookDto getById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto searchParameters);
+    Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable);
 
     BookDto update(Long id, CreateBookRequestDto bookDto);
 

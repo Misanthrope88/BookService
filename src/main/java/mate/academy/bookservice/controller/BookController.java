@@ -14,6 +14,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class BookController {
     @Operation(summary = "Get all books")
     @ApiResponse(responseCode = "200", description = "Page of books returned")
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public Page<BookDto> getAll(@ParameterObject Pageable pageable) {
         return bookService.getAll(pageable);
     }
@@ -44,6 +46,7 @@ public class BookController {
             @ApiResponse(responseCode = "400", description = "Invalid search parameters")
     })
     @GetMapping("/search")
+    @PreAuthorize("hasRole('USER')")
     public Page<BookDto> searchBooks(@ParameterObject @Valid
                                      BookSearchParametersDto searchParameters,
                                      @ParameterObject Pageable pageable) {
@@ -56,6 +59,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getById(id);
     }
@@ -67,6 +71,7 @@ public class BookController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.create(bookDto);
     }
@@ -78,6 +83,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookDto updateBook(@PathVariable Long id,
                               @RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.update(id, bookDto);
@@ -90,6 +96,7 @@ public class BookController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
     }

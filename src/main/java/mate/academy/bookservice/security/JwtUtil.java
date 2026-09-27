@@ -1,37 +1,46 @@
 package mate.academy.bookservice.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    private final Algorithm algorithm;
-    private final JWTVerifier verifier;
+    private final SecretKey key;
+    private final JwtParser parser;
     private final long expirationMillis;
 
     public JwtUtil(@Value("${jwt.secret}") String secret,
                    @Value("${jwt.expiration}") long expirationMillis) {
-        this.algorithm = Algorithm.HMAC256(secret);
-        this.verifier = JWT.require(algorithm)
-                .withClaimPresence("exp")
+        this.key = Keys.hmacShaKeyFor(
+                secret.getBytes(StandardCharsets.UTF_8)
+        );
+        this.parser = Jwts.parser()
+                .verifyWith(key)
                 .build();
         this.expirationMillis = expirationMillis;
     }
 
     public String generateToken(String username) {
         Instant now = Instant.now();
-        return JWT.create()
-                .withSubject(username)
-                .withIssuedAt(now)
-                .withExpiresAt(now.plusMillis(expirationMillis))
-                .sign(algorithm);
+
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plusMillis(expirationMillis)))
+                .signWith(key, Jwts.SIG.HS256)
+                .compact();
     }
 
     public String extractUsername(String token) {
-        return verifier.verify(token).getSubject();
+        return parser.parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 }

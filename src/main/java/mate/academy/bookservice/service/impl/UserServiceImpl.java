@@ -1,8 +1,10 @@
 package mate.academy.bookservice.service.impl;
 
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.UserRegistrationRequestDto;
 import mate.academy.bookservice.dto.UserResponseDto;
+import mate.academy.bookservice.exception.EntityNotFoundException;
 import mate.academy.bookservice.exception.RegistrationException;
 import mate.academy.bookservice.mapper.UserMapper;
 import mate.academy.bookservice.model.Role;
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByEmailIncludingDeleted(request.email())) {
             throw new RegistrationException(
                     "Email is already registered: " + request.email()
             );
@@ -36,8 +38,8 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(request);
         user.setPassword(passwordEncoder.encode(request.password()));
         Role userRole = roleRepository.findByName(RoleName.USER)
-                .orElseThrow(() -> new IllegalStateException("USER role is missing"));
-        user.getRoles().add(userRole);
+                .orElseThrow(() -> new EntityNotFoundException(RoleName.USER + " role is missing"));
+        user.setRoles(Set.of(userRole));
         return userMapper.toDto(userRepository.save(user));
     }
 }

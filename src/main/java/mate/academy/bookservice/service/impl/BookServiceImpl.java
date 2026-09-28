@@ -1,5 +1,8 @@
 package mate.academy.bookservice.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.BookDto;
 import mate.academy.bookservice.dto.BookSearchParametersDto;
@@ -7,7 +10,9 @@ import mate.academy.bookservice.dto.CreateBookRequestDto;
 import mate.academy.bookservice.exception.EntityNotFoundException;
 import mate.academy.bookservice.mapper.BookMapper;
 import mate.academy.bookservice.model.Book;
+import mate.academy.bookservice.model.Category;
 import mate.academy.bookservice.repository.BookRepository;
+import mate.academy.bookservice.repository.CategoryRepository;
 import mate.academy.bookservice.repository.specification.BookSpecificationBuilder;
 import mate.academy.bookservice.service.BookService;
 import org.springframework.data.domain.Page;
@@ -19,13 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     @Transactional
     public BookDto create(CreateBookRequestDto bookDto) {
-        Book book = bookMapper.toModel(bookDto);
+        Book book = bookMapper.toEntity(bookDto);
+        book.setCategories(resolveCategories(bookDto.categoryIds()));
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -57,6 +64,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find book by id: " + id));
         bookMapper.updateBookFromDto(bookDto, book);
+        book.setCategories(resolveCategories(bookDto.categoryIds()));
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -67,5 +75,16 @@ public class BookServiceImpl implements BookService {
             throw new EntityNotFoundException("Can't find book by id: " + id);
         }
         bookRepository.deleteById(id);
+    }
+
+    private Set<Category> resolveCategories(Set<Long> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return new HashSet<>();
+        }
+        return categoryIds.stream()
+                .map(categoryId -> categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new EntityNotFoundException(
+                                "Can't find category by id: " + categoryId)))
+                .collect(Collectors.toSet());
     }
 }

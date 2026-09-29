@@ -48,7 +48,10 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart for user: " + userId));
         if (cart.getCartItems().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Shopping cart is empty");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Shopping cart is empty for user: " + userId
+            );
         }
 
         Order order = new Order();

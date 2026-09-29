@@ -10,6 +10,7 @@ import mate.academy.bookservice.dto.CreateOrderRequestDto;
 import mate.academy.bookservice.dto.OrderDto;
 import mate.academy.bookservice.dto.OrderItemDto;
 import mate.academy.bookservice.dto.UpdateOrderStatusRequestDto;
+import mate.academy.bookservice.model.User;
 import mate.academy.bookservice.service.OrderService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -26,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 @Tag(name = "Orders", description = "Order checkout, history and status operations")
 public class OrderController {
@@ -44,7 +47,8 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     public OrderDto placeOrder(Authentication authentication,
                                @RequestBody @Valid CreateOrderRequestDto request) {
-        return orderService.placeOrder(authentication.getName(), request);
+        User user = (User) authentication.getPrincipal();
+        return orderService.placeOrder(Objects.requireNonNull(user).getId(), request);
     }
 
     @Operation(summary = "Get the current user's order history")
@@ -53,7 +57,8 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     public Page<OrderDto> getOrderHistory(Authentication authentication,
                                           @ParameterObject Pageable pageable) {
-        return orderService.getOrderHistory(authentication.getName(), pageable);
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrderHistory(Objects.requireNonNull(user).getId(), pageable);
     }
 
     @Operation(summary = "Get items from one of the current user's orders")
@@ -66,7 +71,8 @@ public class OrderController {
     public Page<OrderItemDto> getOrderItems(Authentication authentication,
                                              @PathVariable Long orderId,
                                              @ParameterObject Pageable pageable) {
-        return orderService.getOrderItems(authentication.getName(), orderId, pageable);
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrderItems(Objects.requireNonNull(user).getId(), orderId, pageable);
     }
 
     @Operation(summary = "Get a specific item from one of the current user's orders")
@@ -78,7 +84,8 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     public OrderItemDto getOrderItem(Authentication authentication, @PathVariable Long orderId,
                                      @PathVariable Long itemId) {
-        return orderService.getOrderItem(authentication.getName(), orderId, itemId);
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrderItem(Objects.requireNonNull(user).getId(), orderId, itemId);
     }
 
     @Operation(summary = "Update an order's status")

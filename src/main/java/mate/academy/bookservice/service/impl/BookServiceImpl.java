@@ -1,6 +1,5 @@
 package mate.academy.bookservice.service.impl;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -78,9 +77,6 @@ public class BookServiceImpl implements BookService {
     }
 
     private Set<Category> resolveCategories(Set<Long> categoryIds) {
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return new HashSet<>();
-        }
         return categoryIds.stream()
                 .map(categoryId -> categoryRepository.findById(categoryId)
                         .orElseThrow(() -> new EntityNotFoundException(

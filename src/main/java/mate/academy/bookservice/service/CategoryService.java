@@ -2,6 +2,7 @@ package mate.academy.bookservice.service;
 
 import mate.academy.bookservice.dto.BookDtoWithoutCategoryIds;
 import mate.academy.bookservice.dto.CategoryDto;
+import mate.academy.bookservice.dto.CreateCategoryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,9 +11,9 @@ public interface CategoryService {
 
     CategoryDto getById(Long id);
 
-    CategoryDto save(CategoryDto categoryDto);
+    CategoryDto save(CreateCategoryDto createCategoryDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategoryDto update(Long id, CreateCategoryDto createCategoryDto);
 
     void deleteById(Long id);
 

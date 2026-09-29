@@ -3,6 +3,7 @@ package mate.academy.bookservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.BookDtoWithoutCategoryIds;
 import mate.academy.bookservice.dto.CategoryDto;
+import mate.academy.bookservice.dto.CreateCategoryDto;
 import mate.academy.bookservice.exception.EntityNotFoundException;
 import mate.academy.bookservice.mapper.BookMapper;
 import mate.academy.bookservice.mapper.CategoryMapper;
@@ -38,24 +39,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto save(CategoryDto categoryDto) {
-        Category category = categoryMapper.toEntity(categoryDto);
+    public CategoryDto save(CreateCategoryDto createCategoryDto) {
+        Category category = categoryMapper.toEntity(createCategoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
     @Transactional
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CreateCategoryDto createCategoryDto) {
         Category category = findCategoryById(id);
-        categoryMapper.updateCategoryFromDto(categoryDto, category);
+        categoryMapper.updateCategoryFromDto(createCategoryDto, category);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
     @Transactional
     public void deleteById(Long id) {
-        Category category = findCategoryById(id);
-        categoryRepository.delete(category);
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find category by id: " + id);
+        }
+        categoryRepository.deleteById(id);
     }
 
     @Override

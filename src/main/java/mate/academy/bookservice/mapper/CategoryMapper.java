@@ -1,6 +1,7 @@
 package mate.academy.bookservice.mapper;
 
 import mate.academy.bookservice.dto.CategoryDto;
+import mate.academy.bookservice.dto.CreateCategoryDto;
 import mate.academy.bookservice.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,9 +14,10 @@ public interface CategoryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    Category toEntity(CategoryDto categoryDto);
+    Category toEntity(CreateCategoryDto createCategoryDto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    void updateCategoryFromDto(CategoryDto categoryDto, @MappingTarget Category category);
+    void updateCategoryFromDto(CreateCategoryDto createCategoryDto,
+                               @MappingTarget Category category);
 }

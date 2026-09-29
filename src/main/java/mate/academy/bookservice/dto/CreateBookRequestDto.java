@@ -2,6 +2,7 @@ package mate.academy.bookservice.dto;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -30,6 +31,6 @@ public record CreateBookRequestDto(
         String description,
         @Size(max = 255, message = "Cover image must not exceed 255 characters")
         String coverImage,
-        Set<@NotNull @Positive Long> categoryIds
+        @NotEmpty Set<@NotNull @Positive Long> categoryIds
 ) {
 }

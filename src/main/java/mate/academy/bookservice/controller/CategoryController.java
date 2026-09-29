@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookservice.dto.BookDtoWithoutCategoryIds;
 import mate.academy.bookservice.dto.CategoryDto;
+import mate.academy.bookservice.dto.CreateCategoryDto;
 import mate.academy.bookservice.service.CategoryService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
 @Tag(name = "Categories", description = "Book category operations")
 public class CategoryController {
@@ -70,8 +71,8 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    public CategoryDto create(@RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public CategoryDto create(@RequestBody @Valid CreateCategoryDto createCategoryDto) {
+        return categoryService.save(createCategoryDto);
     }
 
     @Operation(summary = "Update a category")
@@ -82,8 +83,9 @@ public class CategoryController {
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public CategoryDto update(@PathVariable Long id, @RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.update(id, categoryDto);
+    public CategoryDto update(@PathVariable Long id,
+                              @RequestBody @Valid CreateCategoryDto createCategoryDto) {
+        return categoryService.update(id, createCategoryDto);
     }
 
     @Operation(summary = "Delete a category")

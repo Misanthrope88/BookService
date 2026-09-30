@@ -12,6 +12,7 @@ import mate.academy.bookservice.model.RoleName;
 import mate.academy.bookservice.model.User;
 import mate.academy.bookservice.repository.RoleRepository;
 import mate.academy.bookservice.repository.UserRepository;
+import mate.academy.bookservice.service.ShoppingCartService;
 import mate.academy.bookservice.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -40,6 +42,8 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByName(RoleName.USER)
                 .orElseThrow(() -> new EntityNotFoundException(RoleName.USER + " role is missing"));
         user.setRoles(Set.of(userRole));
-        return userMapper.toDto(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCart(savedUser);
+        return userMapper.toDto(savedUser);
     }
 }

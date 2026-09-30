@@ -2,10 +2,12 @@ package mate.academy.bookservice.dto;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Set;
 
 public record CreateBookRequestDto(
         @NotBlank(message = "Title must not be blank")
@@ -28,6 +30,7 @@ public record CreateBookRequestDto(
         @Size(max = 255, message = "Description must not exceed 255 characters")
         String description,
         @Size(max = 255, message = "Cover image must not exceed 255 characters")
-        String coverImage
+        String coverImage,
+        @NotEmpty Set<@NotNull @Positive Long> categoryIds
 ) {
 }

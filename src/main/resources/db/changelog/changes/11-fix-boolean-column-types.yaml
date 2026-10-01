@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: fix-boolean-column-types
+      author: mate-academy
+      changes:
+        - modifyDataType:
+            tableName: books
+            columnName: is_deleted
+            newDataType: BIT(1)
+
+        - modifyDataType:
+            tableName: users
+            columnName: is_deleted
+            newDataType: BIT(1)
+
+        - modifyDataType:
+            tableName: categories
+            columnName: is_deleted
+            newDataType: BIT(1)
+
+        - modifyDataType:
+            tableName: orders
+            columnName: is_deleted
+            newDataType: BIT(1)

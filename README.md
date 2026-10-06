@@ -14,9 +14,6 @@ Java, Maven and MySQL are provided by the containers.
    cp .env.template .env
    ```
 
-   `.env.sample` is an equivalent empty template. If `.env` already exists,
-   edit it instead of overwriting it.
-
 2. Fill in every variable in `.env`:
 
    | Variable | Value to provide |

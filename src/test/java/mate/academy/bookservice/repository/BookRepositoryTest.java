@@ -3,6 +3,7 @@ package mate.academy.bookservice.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.persistence.EntityManager;
+import mate.academy.bookservice.AbstractIntegrationTest;
 import mate.academy.bookservice.dto.BookSearchParametersDto;
 import mate.academy.bookservice.model.Book;
 import mate.academy.bookservice.model.Category;
@@ -11,15 +12,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Sql("classpath:database/catalog.sql")
-class BookRepositoryTest {
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class BookRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private BookRepository bookRepository;
     @Autowired

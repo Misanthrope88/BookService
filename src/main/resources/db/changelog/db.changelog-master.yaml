@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/changes/09-create-orders-table.yaml
   - include:
       file: db/changelog/changes/10-create-order-items-table.yaml
+  - include:
+      file: db/changelog/changes/11-fix-boolean-column-types.yaml

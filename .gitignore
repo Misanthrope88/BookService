@@ -34,6 +34,3 @@ build/
 
 ### Environment variables ###
 .env
-.env.*
-!.env.sample
-!.env.template

@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value = "SELECT EXISTS(SELECT 1 FROM users WHERE email = :email)", nativeQuery = true)
-    boolean existsByEmailIncludingDeleted(@Param("email") String email);
+    @Query(value = "SELECT COUNT(*) FROM users WHERE email = :email", nativeQuery = true)
+    long countByEmailIncludingDeleted(@Param("email") String email);
 
     @EntityGraph(attributePaths = "roles")
     Optional<User> findByEmail(String email);

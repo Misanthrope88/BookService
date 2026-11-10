@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (userRepository.existsByEmailIncludingDeleted(request.email())) {
+        if (userRepository.countByEmailIncludingDeleted(request.email()) > 0) {
             throw new RegistrationException(
                     "Email is already registered: " + request.email()
             );

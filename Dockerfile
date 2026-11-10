@@ -18,6 +18,6 @@ COPY --from=build /build/target/*.jar app.jar
 
 USER bookservice
 
-EXPOSE 8080
+EXPOSE 8088
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

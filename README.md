@@ -520,10 +520,9 @@ What is covered:
 
 ## Demo
 
-Video demo: <loom-url>
+Video demo: [book-service.mp4](book-service.mp4)
 
-> The repository owner will replace `<loom-url>` with the link to the recorded
-> walkthrough.
+Click the link to open the video in the repository; GitHub plays it in the browser.
 
 ## Author
 
